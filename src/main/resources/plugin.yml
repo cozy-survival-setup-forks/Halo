@@ -1,0 +1,24 @@
+name: Halo
+version: '${version}'
+main: dev.halo.HaloPlugin
+api-version: '1.21'
+description: Glowing outlines for players, with animated and gradient glows defined in one file
+softdepend:
+  - PlaceholderAPI
+
+commands:
+  glow:
+    description: Choose your glow
+    usage: /<command> equip <id> | unequip | list
+    aliases: [halo]
+
+permissions:
+  halo.use:
+    description: Use /glow
+    default: true
+  halo.admin:
+    description: Reload, and set or clear the glow of other players
+    default: op
+  halo.glow.*:
+    description: Use every glow
+    default: op

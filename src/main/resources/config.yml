@@ -1,0 +1,12 @@
+# Halo
+#
+# The glows themselves are in glows.yml, the texts in messages.yml. Reload both with /glow reload.
+#
+# Every glow has the permission halo.glow.<id>, and halo.glow.* gives all of them. A glow can have its own
+# permission with `permission:` in glows.yml.
+
+# false lets everybody use every glow.
+use-permissions: true
+
+# Worlds where nobody glows. A player's glow comes back when they leave the world.
+disabled-worlds: []

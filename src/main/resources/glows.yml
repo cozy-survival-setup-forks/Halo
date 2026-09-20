@@ -1,0 +1,100 @@
+# Glows. Each one needs the permission halo.glow.<id> (halo.glow.* gives all of them), or your own
+# with `permission:`. Players pick one with /glow equip <id>.
+#
+# The outline of a glowing player can only have one of the 16 Minecraft colours:
+#   black, dark_blue, dark_green, dark_aqua, dark_red, dark_purple, gold, gray,
+#   dark_gray, blue, green, aqua, red, light_purple, yellow, white
+# Any other colour you write (#rrggbb) turns into the closest one of these. That is what makes a gradient
+# work: it fades through your colours and the outline shows the closest colour at every step.
+#
+# type      SINGLE    one colour, always
+#           CYCLE     the colours one after the other, over and over
+#           GRADIENT  fades through the colours (colours can be #rrggbb)
+#           FLASH     each colour blinks on and off
+#           Without a type, one colour is SINGLE and more than one is CYCLE.
+# color     the colour of a SINGLE glow
+# colors    the colours of the other types
+# interval  ticks between two changes (20 = one second). Faster gradients look smoother.
+# steps     GRADIENT: how many fade steps between two colours (default 8)
+# mirror    GRADIENT: fade back to the first colour instead of jumping to it (default true)
+# display   the name in /glow list and menus (default: the id)
+# permission  replaces halo.glow.<id>
+
+glows:
+  # ---- one colour ----
+  red:
+    color: red
+  gold:
+    color: gold
+  yellow:
+    color: yellow
+  green:
+    color: green
+  aqua:
+    color: aqua
+  blue:
+    color: blue
+  purple:
+    color: light_purple
+  white:
+    color: white
+
+  # ---- cycling through colours ----
+  rainbow:
+    display: "Rainbow"
+    type: CYCLE
+    interval: 10
+    colors: [red, gold, yellow, green, aqua, blue, dark_purple, light_purple]
+  tropical:
+    display: "Tropical"
+    type: CYCLE
+    interval: 20
+    colors: [gold, yellow, aqua, green]
+  candy:
+    display: "Candy"
+    type: CYCLE
+    interval: 15
+    colors: [light_purple, white]
+
+  # ---- gradients ----
+  sunset:
+    display: "Sunset"
+    type: GRADIENT
+    interval: 3
+    steps: 10
+    colors: ["#ff512f", "#f09819", "#ffd200"]
+  ocean:
+    display: "Ocean"
+    type: GRADIENT
+    interval: 4
+    steps: 8
+    colors: ["#00c6ff", "#0072ff", "#0a1f8f"]
+  aurora:
+    display: "Aurora"
+    type: GRADIENT
+    interval: 4
+    steps: 8
+    colors: ["#00ff87", "#60efff", "#c471ed"]
+  fire:
+    display: "Fire"
+    type: GRADIENT
+    interval: 2
+    steps: 6
+    colors: [dark_red, red, gold]
+
+  # ---- flashing ----
+  police:
+    display: "Police"
+    type: FLASH
+    interval: 4
+    colors: [red, blue]
+  strobe:
+    display: "Strobe"
+    type: FLASH
+    interval: 3
+    colors: [white]
+  glitch:
+    display: "Glitch"
+    type: FLASH
+    interval: 2
+    colors: [aqua, light_purple, white]

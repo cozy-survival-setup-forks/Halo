@@ -1,0 +1,23 @@
+# MiniMessage (<red>text</red>) and old & codes both work. <placeholders> are filled in.
+# Leave a message empty to turn it off.
+
+prefix: "<gradient:#7cf5ff:#b18cff><bold>HALO</bold></gradient> <dark_gray>» "
+
+no-permission: "<red>You do not have this glow."
+players-only: "<red>Only players can do this."
+unknown-glow: "<red>There is no glow with that name."
+equipped: "<white>Your glow is now <glow>."
+unequipped: "<white>Your glow is gone."
+list-empty: "<white>You do not have any glows yet."
+list-header: "<white>Your glows:"
+list-entry: "<dark_gray>▸ <glow> <gray>(<id>)"
+admin-set: "<white>Gave <player> the glow <glow>."
+admin-cleared: "<white>Removed the glow of <player>."
+player-not-found: "<red>That player is not online."
+reloaded: "<white>Reloaded <count> glows."
+
+usage:
+  - "{prefix}<white>Glow"
+  - "<white>/glow equip <id> <gray>▸ pick a glow"
+  - "<white>/glow unequip <gray>▸ remove it"
+  - "<white>/glow list <gray>▸ the ones you can use"
