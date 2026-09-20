@@ -1,7 +1,7 @@
 # Halo
 
 Glowing outlines for players on Paper 1.21+. Every glow is written in one file, `glows.yml`: a single colour, colours
-that cycle, a gradient that fades through your colours, or a flashing glow. There is no built-in menu, build one with
+that cycle or bounce, or a flashing glow. There is no built-in menu, build one with
 DeluxeMenus (or any menu plugin) using the commands and placeholders below.
 
 ## Files
@@ -24,12 +24,10 @@ glows:
     interval: 10
     colors: [red, gold, yellow, green, aqua, blue, light_purple]
 
-  sunset:
-    display: "Sunset"
-    type: GRADIENT
-    interval: 3
-    steps: 10
-    colors: ["#ff512f", "#f09819", "#ffd200"]
+  fire:
+    type: BOUNCE
+    interval: 5
+    colors: [dark_red, red, gold, yellow]
 
   police:
     type: FLASH
@@ -39,20 +37,20 @@ glows:
 
 | Key | Meaning |
 | --- | --- |
-| `type` | `SINGLE`, `CYCLE`, `GRADIENT` or `FLASH`. Without it, one colour is `SINGLE` and more are `CYCLE` |
-| `color` / `colors` | Names (`dark_red`), codes (`c`, `&c`) or hex (`#rrggbb`) |
+| `type` | `SINGLE`, `CYCLE`, `BOUNCE` or `FLASH`. Without it, one colour is `SINGLE` and more are `CYCLE` |
+| `color` / `colors` | One of the 16 colours (`dark_red`, `gold`...) or its code (`c`, `&c`) |
 | `interval` | Ticks between two changes, 20 is one second |
-| `steps` | `GRADIENT`: fade steps between two colours (default 8) |
-| `mirror` | `GRADIENT`: fade back to the start instead of jumping to it (default true) |
 | `display` | The name in `/glow list` and messages |
 | `permission` | Replaces `halo.glow.<id>` |
 
-### About gradients
+The types:
 
-The outline of a glowing player can only have one of Minecraft's 16 colours. That limit comes from the game, not the
-plugin. A hex colour turns into the closest of the 16, and a gradient fades through your colours and shows the closest
-one at every step. The outline stays a named colour, but the change is smooth. More `steps` and a small `interval`
-make it look smoother.
+- `SINGLE`: one colour.
+- `CYCLE`: the colours one after the other, over and over.
+- `BOUNCE`: the colours forwards, then backwards.
+- `FLASH`: every colour blinks on and off.
+
+The outline of a glowing player can only have one of Minecraft's 16 colours, which is a limit of the game.
 
 ## Commands
 

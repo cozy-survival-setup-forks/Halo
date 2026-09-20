@@ -45,39 +45,17 @@ class GlowLibraryTest {
     }
 
     @Test
-    void aGradientStartsAndEndsOnItsColours() throws Exception {
-        Glow glow = library("glows:\n  fade:\n    type: GRADIENT\n    steps: 6\n    mirror: false\n    colors: ['#ff5555', '#5555ff']\n").get("fade");
+    void bouncingGoesForwardsAndBackWithoutRepeatingTheEnds() throws Exception {
+        Glow glow = library("glows:\n  wave:\n    type: BOUNCE\n    colors: [red, gold, green]\n").get("wave");
 
-        assertEquals(NamedTextColor.RED, glow.frames().get(0));
-        assertEquals(NamedTextColor.BLUE, glow.frames().get(glow.frames().size() - 1));
-        assertEquals(7, glow.frames().size());
+        assertEquals(List.of(NamedTextColor.RED, NamedTextColor.GOLD, NamedTextColor.GREEN, NamedTextColor.GOLD), glow.frames());
     }
 
     @Test
-    void aMirroredGradientFadesBackWithoutRepeatingTheEnds() throws Exception {
-        Glow glow = library("glows:\n  fade:\n    type: GRADIENT\n    steps: 4\n    colors: ['#ff5555', '#5555ff']\n").get("fade");
+    void bouncingTwoColoursJustSwitchesBetweenThem() throws Exception {
+        Glow glow = library("glows:\n  wave:\n    type: BOUNCE\n    colors: [red, blue]\n").get("wave");
 
-        // 4 fade steps and the end colour, then back down without the two end colours again
-        assertEquals(5 + 3, glow.frames().size());
-        assertEquals(NamedTextColor.RED, glow.frames().get(0));
-        assertEquals(NamedTextColor.BLUE, glow.frames().get(4));
-        assertEquals(glow.frames().get(1), glow.frames().get(glow.frames().size() - 1));
-    }
-
-    @Test
-    void aGradientOverSeveralColoursPassesThroughThem() throws Exception {
-        Glow glow = library("glows:\n  three:\n    type: GRADIENT\n    steps: 4\n    mirror: false\n    colors: ['#ff5555', '#55ff55', '#5555ff']\n").get("three");
-
-        assertEquals(NamedTextColor.RED, glow.frames().get(0));
-        assertEquals(NamedTextColor.GREEN, glow.frames().get(4));
-        assertEquals(NamedTextColor.BLUE, glow.frames().get(glow.frames().size() - 1));
-    }
-
-    @Test
-    void hexColoursTurnIntoTheClosestGlowColour() throws Exception {
-        Glow glow = library("glows:\n  pink:\n    color: '#ff5555'\n").get("pink");
-
-        assertEquals(List.of(NamedTextColor.RED), glow.frames());
+        assertEquals(List.of(NamedTextColor.RED, NamedTextColor.BLUE), glow.frames());
     }
 
     @Test
@@ -133,13 +111,13 @@ class GlowLibraryTest {
     }
 
     @Test
-    void coloursCanBeWrittenInAllTheWaysPlayersKnow() {
-        assertEquals(NamedTextColor.RED, Colors.nearest(Colors.parse("&c")));
-        assertEquals(NamedTextColor.RED, Colors.nearest(Colors.parse("c")));
-        assertEquals(NamedTextColor.DARK_RED, Colors.nearest(Colors.parse("dark_red")));
-        assertEquals(NamedTextColor.BLUE, Colors.nearest(Colors.parse("&#5555ff")));
+    void coloursCanBeWrittenAsNamesOrCodes() {
+        assertEquals(NamedTextColor.RED, Colors.parse("&c"));
+        assertEquals(NamedTextColor.RED, Colors.parse("c"));
+        assertEquals(NamedTextColor.DARK_RED, Colors.parse("dark_red"));
+        assertEquals(NamedTextColor.LIGHT_PURPLE, Colors.parse(" Light_Purple "));
         assertNull(Colors.parse("banana"));
-        assertNull(Colors.parse("#12"));
+        assertNull(Colors.parse("#ff5555"));
         assertNull(Colors.parse(""));
         assertNull(Colors.parse(null));
     }
@@ -162,6 +140,5 @@ class GlowLibraryTest {
             assertFalse(glow.frames().isEmpty(), glow.id());
             assertFalse(glow.display().contains("<"), glow.id());
         }
-        assertTrue(library.get("sunset").frames().size() > 10);
     }
 }

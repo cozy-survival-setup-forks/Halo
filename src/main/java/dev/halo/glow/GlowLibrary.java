@@ -1,7 +1,6 @@
 package dev.halo.glow;
 
 import net.kyori.adventure.text.format.NamedTextColor;
-import net.kyori.adventure.text.format.TextColor;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.jetbrains.annotations.Nullable;
@@ -17,8 +16,6 @@ import java.util.logging.Logger;
 
 /** The glows of glows.yml, in the order they are written. */
 public final class GlowLibrary {
-
-    private static final int DEFAULT_STEPS = 8;
 
     private final Map<String, Glow> glows;
 
@@ -55,11 +52,11 @@ public final class GlowLibrary {
         List<String> names = new ArrayList<>(entry.getStringList("colors"));
         if (entry.isString("color")) names.add(0, entry.getString("color", ""));
 
-        List<TextColor> colors = new ArrayList<>();
+        List<NamedTextColor> colors = new ArrayList<>();
         for (String name : names) {
-            TextColor color = Colors.parse(name);
+            NamedTextColor color = Colors.parse(name);
             if (color == null) {
-                log.warning("glows.yml: " + id + " has the colour '" + name + "', which is not a colour. Skipping it.");
+                log.warning("glows.yml: " + id + " has the colour '" + name + "', which is not one of the 16 colours. Skipping it.");
             } else {
                 colors.add(color);
             }
@@ -70,31 +67,31 @@ public final class GlowLibrary {
         }
         if (type.isEmpty()) type = colors.size() == 1 ? "SINGLE" : "CYCLE";
 
-        int steps = Math.max(1, entry.getInt("steps", DEFAULT_STEPS));
         List<NamedTextColor> frames = new ArrayList<>();
         int interval;
         switch (type) {
             case "SINGLE" -> {
-                frames.add(Colors.nearest(colors.get(0)));
+                frames.add(colors.get(0));
                 interval = 20;
             }
             case "CYCLE" -> {
-                colors.forEach(color -> frames.add(Colors.nearest(color)));
+                frames.addAll(colors);
                 interval = 10;
             }
-            case "GRADIENT" -> {
-                frames.addAll(Colors.gradient(colors, steps, entry.getBoolean("mirror", true)));
-                interval = 4;
+            case "BOUNCE" -> {
+                frames.addAll(colors);
+                for (int i = colors.size() - 2; i >= 1; i--) frames.add(colors.get(i));
+                interval = 10;
             }
             case "FLASH" -> {
-                for (TextColor color : colors) {
-                    frames.add(Colors.nearest(color));
+                for (NamedTextColor color : colors) {
+                    frames.add(color);
                     frames.add(null);
                 }
                 interval = 5;
             }
             default -> {
-                log.warning("glows.yml: " + id + " has the type '" + type + "', which is not SINGLE, CYCLE, GRADIENT or FLASH.");
+                log.warning("glows.yml: " + id + " has the type '" + type + "', which is not SINGLE, CYCLE, BOUNCE or FLASH.");
                 return null;
             }
         }

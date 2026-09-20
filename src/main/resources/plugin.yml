@@ -2,7 +2,7 @@ name: Halo
 version: '${version}'
 main: dev.halo.HaloPlugin
 api-version: '1.21'
-description: Glowing outlines for players, with animated and gradient glows defined in one file
+description: Glowing outlines for players, with colours, cycles and flashing effects defined in one file
 softdepend:
   - PlaceholderAPI
   - TAB
