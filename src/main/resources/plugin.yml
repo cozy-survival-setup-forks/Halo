@@ -5,6 +5,7 @@ api-version: '1.21'
 description: Glowing outlines for players, with animated and gradient glows defined in one file
 softdepend:
   - PlaceholderAPI
+  - TAB
 
 commands:
   glow:

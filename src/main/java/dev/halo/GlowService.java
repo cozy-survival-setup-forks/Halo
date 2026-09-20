@@ -2,6 +2,7 @@ package dev.halo;
 
 import dev.halo.glow.Glow;
 import dev.halo.glow.GlowLibrary;
+import dev.halo.hook.TabSupport;
 import net.kyori.adventure.text.format.NamedTextColor;
 import org.bukkit.Bukkit;
 import org.bukkit.configuration.file.YamlConfiguration;
@@ -30,6 +31,7 @@ public final class GlowService {
         int frame;
         @Nullable NamedTextColor shown;
         @Nullable Team before;
+        boolean viaTab;
 
         Running(Glow glow, @Nullable Team before) {
             this.glow = glow;
@@ -40,11 +42,16 @@ public final class GlowService {
     private final HaloPlugin plugin;
     private final Map<UUID, Running> running = new HashMap<>();
     private GlowLibrary library;
+    private @Nullable TabSupport tab;
     private BukkitTask ticker;
     private long tick;
 
     GlowService(HaloPlugin plugin) {
         this.plugin = plugin;
+    }
+
+    void useTab(TabSupport support) {
+        this.tab = support;
     }
 
     void load() {
@@ -117,7 +124,7 @@ public final class GlowService {
         Running current = running.remove(player.getUniqueId());
         if (current == null) return;
 
-        leaveTeam(player, current);
+        release(player, current);
         player.setGlowing(false);
     }
 
@@ -138,7 +145,7 @@ public final class GlowService {
         NamedTextColor color = current.glow.frames().get(current.frame);
         if (color == null) {
             if (current.shown != null) {
-                leaveTeam(player, current);
+                release(player, current);
                 player.setGlowing(false);
                 current.shown = null;
             }
@@ -146,9 +153,22 @@ public final class GlowService {
         }
         if (color == current.shown) return;
 
-        team(color).addEntry(player.getName());
+        boolean throughTab = tab != null && tab.apply(player, color);
+        if (!throughTab) {
+            team(color).addEntry(player.getName());
+        } else if (!current.viaTab) {
+            leaveTeam(player, current);
+        }
+        current.viaTab = throughTab;
         player.setGlowing(true);
         current.shown = color;
+    }
+
+    /** Gives back what the glow changed: the prefix from TAB, or the team the player was in. */
+    private void release(Player player, Running current) {
+        if (current.viaTab && tab != null) tab.clear(player);
+        current.viaTab = false;
+        leaveTeam(player, current);
     }
 
     /** Puts the player back in the team they were in before the glow, if there was one. */

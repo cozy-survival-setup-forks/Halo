@@ -12,16 +12,22 @@ import java.util.Set;
 public final class Settings {
 
     private final boolean usePermissions;
+    private final boolean tabIntegration;
     private final Set<String> disabledWorlds = new HashSet<>();
 
     Settings(FileConfiguration config) {
         usePermissions = config.getBoolean("use-permissions", true);
+        tabIntegration = config.getBoolean("tab-integration", true);
         List<String> worlds = config.getStringList("disabled-worlds");
         worlds.forEach(world -> disabledWorlds.add(world.toLowerCase(Locale.ROOT)));
     }
 
     public boolean usePermissions() {
         return usePermissions;
+    }
+
+    public boolean tabIntegration() {
+        return tabIntegration;
     }
 
     public boolean isDisabled(World world) {

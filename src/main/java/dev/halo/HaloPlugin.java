@@ -2,6 +2,7 @@ package dev.halo;
 
 import dev.halo.command.GlowCommand;
 import dev.halo.hook.HaloExpansion;
+import dev.halo.hook.TabSupport;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.java.JavaPlugin;
@@ -38,6 +39,12 @@ public final class HaloPlugin extends JavaPlugin {
 
         if (getServer().getPluginManager().isPluginEnabled("PlaceholderAPI")) {
             new HaloExpansion(this).register();
+        }
+
+        if (settings.tabIntegration() && getServer().getPluginManager().isPluginEnabled("TAB")) {
+            TabSupport tab = new TabSupport(this);
+            glows.useTab(tab);
+            tab.listen();
         }
 
         for (Player player : Bukkit.getOnlinePlayers()) {

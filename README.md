@@ -101,9 +101,12 @@ items:
 
 ## Good to know
 
-- Halo moves a glowing player into a scoreboard team called `halo_<colour>` on the main scoreboard, and puts them back
-  in their old team when the glow ends. A plugin that gives every player its own team on the same scoreboard for name
-  tags (TAB and similar) decides the glow colour itself in that case.
+- **TAB:** nothing has to be added to TAB's files. When TAB is installed, Halo adds the glow colour to the end of the
+  prefix TAB already gives the player, and TAB's name tag team carries the colour, so rank prefixes keep working and
+  animated glows change as fast as you set them. The name above the head takes the glow colour too. Set
+  `tab-integration: false` in `config.yml` to leave TAB alone.
+- Without TAB, Halo moves a glowing player into a scoreboard team called `halo_<colour>` on the main scoreboard, and puts
+  them back in their old team when the glow ends.
 - The glow comes back after a relog, a respawn and a world change, and is off in the worlds listed in `disabled-worlds`.
 
 ## Building

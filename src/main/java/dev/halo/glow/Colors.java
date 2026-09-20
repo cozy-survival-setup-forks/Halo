@@ -9,7 +9,7 @@ import java.util.List;
 import java.util.Locale;
 
 /** Reading colours, and fitting any colour to the 16 that a glow can have. */
-final class Colors {
+public final class Colors {
 
     private static final String LEGACY_CODES = "0123456789abcdef";
     private static final NamedTextColor[] LEGACY_COLORS = {
@@ -38,6 +38,14 @@ final class Colors {
             return index < 0 ? null : LEGACY_COLORS[index];
         }
         return NamedTextColor.NAMES.value(text);
+    }
+
+    /** The old style colour code of one of the 16 colours, such as 'c' for red. */
+    public static char code(NamedTextColor color) {
+        for (int i = 0; i < LEGACY_COLORS.length; i++) {
+            if (LEGACY_COLORS[i] == color) return LEGACY_CODES.charAt(i);
+        }
+        return 'f';
     }
 
     static NamedTextColor nearest(TextColor color) {

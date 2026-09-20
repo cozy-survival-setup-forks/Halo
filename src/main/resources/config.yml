@@ -8,5 +8,10 @@
 # false lets everybody use every glow.
 use-permissions: true
 
+# When TAB is installed, Halo gives the glow colour to TAB, so TAB's name tag teams keep working and the
+# rank prefix stays. Nothing has to be added to TAB's files. The name above the head takes the glow colour too.
+# Set this to false to leave TAB alone and use Halo's own teams.
+tab-integration: true
+
 # Worlds where nobody glows. A player's glow comes back when they leave the world.
 disabled-worlds: []
