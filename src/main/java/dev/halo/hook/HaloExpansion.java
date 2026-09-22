@@ -29,7 +29,7 @@ public final class HaloExpansion extends PlaceholderExpansion {
 
     @Override
     public @NotNull String getAuthor() {
-        return "Halo";
+        return String.join(", ", plugin.getPluginMeta().getAuthors());
     }
 
     @Override
