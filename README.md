@@ -107,6 +107,12 @@ items:
   them back in their old team when the glow ends.
 - The glow comes back after a relog, a respawn and a world change, and is off in the worlds listed in `disabled-worlds`.
 
+## Telemetry
+
+On startup Halo sends a small anonymous beacon (plugin name/version, server software/version,
+online/max player counts, and a random ID with no player data) so we know which versions are in
+use. Turn it off with `metrics.enabled: false` in `config.yml`.
+
 ## Building
 
 ```

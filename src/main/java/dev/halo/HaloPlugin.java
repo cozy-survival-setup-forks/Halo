@@ -65,6 +65,7 @@ public final class HaloPlugin extends JavaPlugin {
         for (Player player : Bukkit.getOnlinePlayers()) {
             glows.refresh(player);
         }
+        Metrics.start(this);
         Banner.print(this, "Thanks for letting every server shine a little.");
     }
 
