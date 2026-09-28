@@ -99,7 +99,8 @@ public final class GlowCommand implements TabExecutor {
             return;
         }
         int count = plugin.reloadAll();
-        plugin.messages().send(sender, "reloaded", Placeholder.unparsed("count", String.valueOf(count)));
+        if (count < 0) plugin.messages().send(sender, "reload-failed");
+        else plugin.messages().send(sender, "reloaded", Placeholder.unparsed("count", String.valueOf(count)));
     }
 
     private void admin(CommandSender sender, String[] args) {

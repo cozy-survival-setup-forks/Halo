@@ -4,6 +4,7 @@ import dev.halo.HaloPlugin;
 import dev.halo.glow.Colors;
 import me.neznamy.tab.api.TabAPI;
 import me.neznamy.tab.api.TabPlayer;
+import me.neznamy.tab.api.event.EventHandler;
 import me.neznamy.tab.api.event.player.PlayerLoadEvent;
 import me.neznamy.tab.api.event.plugin.TabLoadEvent;
 import me.neznamy.tab.api.nametag.NameTagManager;
@@ -19,6 +20,8 @@ import org.bukkit.entity.Player;
 public final class TabSupport {
 
     private final HaloPlugin plugin;
+    private EventHandler<PlayerLoadEvent> onPlayerLoad;
+    private EventHandler<TabLoadEvent> onTabLoad;
 
     public TabSupport(HaloPlugin plugin) {
         this.plugin = plugin;
@@ -27,17 +30,27 @@ public final class TabSupport {
     /** Starts the glows again when a player finishes loading in TAB, or after /tab reload. */
     public void listen() {
         TabAPI api = TabAPI.getInstance();
-        api.getEventBus().register(PlayerLoadEvent.class, event -> {
+        onPlayerLoad = event -> {
             Player player = Bukkit.getPlayer(event.getPlayer().getUniqueId());
             if (player != null) refreshLater(player);
-        });
-        api.getEventBus().register(TabLoadEvent.class, event -> Bukkit.getOnlinePlayers().forEach(this::refreshLater));
+        };
+        onTabLoad = event -> Bukkit.getOnlinePlayers().forEach(this::refreshLater);
+        api.getEventBus().register(PlayerLoadEvent.class, onPlayerLoad);
+        api.getEventBus().register(TabLoadEvent.class, onTabLoad);
+    }
+
+    /** Without this, these handlers outlive a /reload: the old ones keep firing, calling
+     * Bukkit.getScheduler().runTask on a plugin instance that is no longer enabled. */
+    public void stop() {
+        var bus = TabAPI.getInstance().getEventBus();
+        if (onPlayerLoad != null) bus.unregister(onPlayerLoad);
+        if (onTabLoad != null) bus.unregister(onTabLoad);
     }
 
     /** These events may come from another thread. */
     private void refreshLater(Player player) {
         Bukkit.getScheduler().runTask(plugin, () -> {
-            if (player.isOnline()) plugin.glows().refresh(player);
+            if (player.isOnline() && plugin.isEnabled()) plugin.glows().refresh(player);
         });
     }
 

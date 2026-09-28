@@ -4,10 +4,12 @@ import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.minimessage.MiniMessage;
 import net.kyori.adventure.text.minimessage.tag.resolver.TagResolver;
 import org.bukkit.command.CommandSender;
+import org.bukkit.configuration.InvalidConfigurationException;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
 
 import java.io.File;
+import java.io.IOException;
 import java.io.InputStreamReader;
 import java.nio.charset.StandardCharsets;
 import java.util.regex.Matcher;
@@ -32,15 +34,33 @@ public final class Messages {
         this.plugin = plugin;
     }
 
-    void load() {
+    /** @return false if messages.yml is broken, in which case the messages already loaded are kept */
+    boolean load() {
         File target = new File(plugin.getDataFolder(), "messages.yml");
         if (!target.exists()) plugin.saveResource("messages.yml", false);
-        file = YamlConfiguration.loadConfiguration(target);
+
+        YamlConfiguration loaded = new YamlConfiguration();
+        try {
+            loaded.load(target);
+        } catch (IOException | InvalidConfigurationException e) {
+            plugin.getLogger().severe("messages.yml is broken, keeping the messages already loaded: " + e.getMessage());
+            return false;
+        }
 
         var defaults = plugin.getResource("messages.yml");
         if (defaults != null) {
-            file.setDefaults(YamlConfiguration.loadConfiguration(new InputStreamReader(defaults, StandardCharsets.UTF_8)));
+            loaded.setDefaults(YamlConfiguration.loadConfiguration(new InputStreamReader(defaults, StandardCharsets.UTF_8)));
         }
+        file = loaded;
+        return true;
+    }
+
+    /** {@code file.getString(key, "")} never falls back to a bundled default even after setDefaults - the
+     * two-argument getString only ever returns the explicit default when the key is unset, it never
+     * consults the defaults. The one-argument form does. */
+    private String text(String key) {
+        String value = file.getString(key);
+        return value == null ? "" : value;
     }
 
     /** Turns &amp; codes into MiniMessage tags. */
@@ -67,13 +87,13 @@ public final class Messages {
     public void send(CommandSender to, String key, TagResolver... resolvers) {
         if (file.isList(key)) {
             for (String line : file.getStringList(key)) {
-                to.sendMessage(MINI.deserialize(convertLegacy(line.replace("{prefix}", file.getString("prefix", ""))), resolvers));
+                to.sendMessage(MINI.deserialize(convertLegacy(line.replace("{prefix}", text("prefix"))), resolvers));
             }
             return;
         }
-        String text = file.getString(key, "");
-        if (text.isEmpty()) return;
-        to.sendMessage(component(file.getString("prefix", "") + text, resolvers));
+        String message = text(key);
+        if (message.isEmpty()) return;
+        to.sendMessage(component(text("prefix") + message, resolvers));
     }
 
     private static Component component(String text, TagResolver... resolvers) {

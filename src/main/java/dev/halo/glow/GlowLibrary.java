@@ -50,7 +50,12 @@ public final class GlowLibrary {
     private static @Nullable Glow parse(String id, ConfigurationSection entry, Logger log) {
         String type = entry.getString("type", "").trim().toUpperCase(Locale.ROOT);
         List<String> names = new ArrayList<>(entry.getStringList("colors"));
-        if (entry.isString("color")) names.add(0, entry.getString("color", ""));
+        // entry.isString("color") is false for a bare numeric code like "4" (YAML reads it as a Long) -
+        // reading the raw value and converting it to text instead lets Colors.parse accept it, the same
+        // way it already accepts a single-character string code. (An unquoted "&c" is a YAML anchor, not
+        // text, and SnakeYAML drops it before this ever sees a value - that one needs quotes in the file.)
+        Object rawColor = entry.get("color");
+        if (rawColor != null) names.add(0, String.valueOf(rawColor));
 
         List<NamedTextColor> colors = new ArrayList<>();
         for (String name : names) {

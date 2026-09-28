@@ -38,7 +38,7 @@ glows:
 | Key | Meaning |
 | --- | --- |
 | `type` | `SINGLE`, `CYCLE`, `BOUNCE` or `FLASH`. Without it, one colour is `SINGLE` and more are `CYCLE` |
-| `color` / `colors` | One of the 16 colours (`dark_red`, `gold`...) or its code (`c`, `&c`) |
+| `color` / `colors` | One of the 16 colours (`dark_red`, `gold`...) or its code (`c`, `"&c"` - quote it when it starts with &) |
 | `interval` | Ticks between two changes, 20 is one second |
 | `display` | The name in `/glow list` and messages |
 | `permission` | Replaces `halo.glow.<id>` |

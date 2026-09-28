@@ -15,6 +15,7 @@ admin-set: "<white>Gave <player> the glow <glow>."
 admin-cleared: "<white>Removed the glow of <player>."
 player-not-found: "<red>That player is not online."
 reloaded: "<white>Reloaded <count> glows."
+reload-failed: "<red>config.yml, glows.yml or messages.yml has a mistake, check the console. Kept the old settings."
 
 usage:
   - "{prefix}<white>Glow"

@@ -4,8 +4,14 @@ import dev.halo.command.GlowCommand;
 import dev.halo.hook.HaloExpansion;
 import dev.halo.hook.TabSupport;
 import org.bukkit.Bukkit;
+import org.bukkit.configuration.InvalidConfigurationException;
+import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.java.JavaPlugin;
+
+import java.io.File;
+import java.io.IOException;
+import java.util.logging.Level;
 
 /**
  * Halo: glowing outlines for players. The glows are in glows.yml, and menus are left to a menu plugin.
@@ -19,6 +25,15 @@ public final class HaloPlugin extends JavaPlugin {
 
     @Override
     public void onEnable() {
+        try {
+            enableInner();
+        } catch (RuntimeException e) {
+            getLogger().log(Level.SEVERE, "Halo could not start, check config.yml, glows.yml and messages.yml for mistakes", e);
+            Bukkit.getPluginManager().disablePlugin(this);
+        }
+    }
+
+    private void enableInner() {
         saveDefaultConfig();
         settings = new Settings(getConfig());
         messages = new Messages(this);
@@ -57,12 +72,22 @@ public final class HaloPlugin extends JavaPlugin {
         if (glows != null) glows.stop();
     }
 
-    /** Reads all the files again. Returns how many glows there are. */
+    /** Reads all the files again. @return how many glows there are, or -1 if a file was broken (the
+     * old settings/messages/glows are kept in that case, and nothing is refreshed) */
     public int reloadAll() {
-        reloadConfig();
-        settings = new Settings(getConfig());
-        messages.load();
-        glows.load();
+        File configFile = new File(getDataFolder(), "config.yml");
+        YamlConfiguration loadedConfig = new YamlConfiguration();
+        try {
+            loadedConfig.load(configFile);
+        } catch (IOException | InvalidConfigurationException e) {
+            getLogger().severe("config.yml is broken, keeping the settings already loaded: " + e.getMessage());
+            return -1;
+        }
+        boolean messagesOk = messages.load();
+        boolean glowsOk = glows.load();
+        if (!messagesOk || !glowsOk) return -1;
+
+        settings = new Settings(loadedConfig);
         for (Player player : Bukkit.getOnlinePlayers()) {
             glows.refresh(player);
         }

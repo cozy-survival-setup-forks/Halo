@@ -111,6 +111,13 @@ class GlowLibraryTest {
     }
 
     @Test
+    void aSingleColourWorksAsANumberCode() throws Exception {
+        // entry.isString("color") was false for a bare number like "4" (YAML reads it as a Long), so it
+        // was silently dropped even though Colors.parse already accepts single-character codes like "4".
+        assertEquals(List.of(NamedTextColor.DARK_RED), library("glows:\n  a:\n    color: 4\n").get("a").frames());
+    }
+
+    @Test
     void coloursCanBeWrittenAsNamesOrCodes() {
         assertEquals(NamedTextColor.RED, Colors.parse("&c"));
         assertEquals(NamedTextColor.RED, Colors.parse("c"));

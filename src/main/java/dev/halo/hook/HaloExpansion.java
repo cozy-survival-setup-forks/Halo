@@ -43,6 +43,11 @@ public final class HaloExpansion extends PlaceholderExpansion {
     }
 
     @Override
+    public @NotNull String getRequiredPlugin() {
+        return "Halo";
+    }
+
+    @Override
     public @Nullable String onPlaceholderRequest(Player player, @NotNull String params) {
         if (player == null) return "";
         String request = params.toLowerCase(Locale.ROOT);
