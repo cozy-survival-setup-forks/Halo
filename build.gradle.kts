@@ -47,6 +47,9 @@ tasks {
 
     jar {
         archiveFileName = "Halo-${project.version}.jar"
+        manifest {
+            attributes("Implementation-Vendor" to "Groovified / Blockie Studios")
+        }
     }
 
     runServer {

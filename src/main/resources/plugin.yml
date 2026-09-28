@@ -4,6 +4,7 @@ main: dev.halo.HaloPlugin
 api-version: '1.21'
 description: Glowing outlines for players, with colours, cycles and flashing effects defined in one file
 authors: [Groovified]
+website: https://discord.gg/blockie
 softdepend:
   - PlaceholderAPI
   - TAB

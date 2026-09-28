@@ -113,4 +113,4 @@ items:
 ./gradlew build
 ```
 
-The jar is in `build/libs`. Licensed under MIT.
+The jar is in `build/libs`. See `LICENSE`: free to run on your own servers, not for redistribution or resale.
