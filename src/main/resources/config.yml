@@ -16,9 +16,12 @@ tab-integration: true
 # Worlds where nobody glows. A player's glow comes back when they leave the world.
 disabled-worlds: []
 
+# While a player is invisible (the invisibility potion, or a vanish plugin) their glow is switched off, so
+# the outline does not give them away. It comes back on its own once they are visible again.
+disable-when-invisible: true
+
 # Anonymous usage beacon: plugin name/version, server software/version and online/max player
 # counts, nothing else. Set to false to turn it off.
 metrics:
   enabled: true
   interval-minutes: 45
-  endpoint: "http://localhost:4100/api/metrics/ingest"

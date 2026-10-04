@@ -9,7 +9,7 @@ DeluxeMenus (or any menu plugin) using the commands and placeholders below.
 | File | What it holds |
 | --- | --- |
 | `glows.yml` | All the glows |
-| `config.yml` | Permissions on or off, worlds where nobody glows |
+| `config.yml` | Permissions on or off, worlds where nobody glows, glows pausing while invisible |
 | `messages.yml` | Every message the plugin sends |
 
 ## Writing a glow
@@ -40,7 +40,7 @@ glows:
 | `type` | `SINGLE`, `CYCLE`, `BOUNCE` or `FLASH`. Without it, one colour is `SINGLE` and more are `CYCLE` |
 | `color` / `colors` | One of the 16 colours (`dark_red`, `gold`...) or its code (`c`, `"&c"` - quote it when it starts with &) |
 | `interval` | Ticks between two changes, 20 is one second |
-| `display` | The name in `/glow list` and messages |
+| `display` | The name in `/glow list` and messages. MiniMessage (`<gradient:#ff5073:#77ecf0>Rainbow</gradient>`) and `&` codes work |
 | `permission` | Replaces `halo.glow.<id>` |
 
 The types:
@@ -71,6 +71,9 @@ The outline of a glowing player can only have one of Minecraft's 16 colours, whi
 - `halo.admin`: reload, admin set and clear
 
 Set `use-permissions: false` in `config.yml` to let everybody use every glow.
+
+A glow switches itself off while the player is invisible (the invisibility potion, or a vanish plugin) and comes back when
+they are visible again; the picked glow is kept. Set `disable-when-invisible: false` in `config.yml` to turn this off.
 
 ## Placeholders (PlaceholderAPI)
 

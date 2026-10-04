@@ -13,11 +13,13 @@ public final class Settings {
 
     private final boolean usePermissions;
     private final boolean tabIntegration;
+    private final boolean disableWhenInvisible;
     private final Set<String> disabledWorlds = new HashSet<>();
 
     Settings(FileConfiguration config) {
         usePermissions = config.getBoolean("use-permissions", true);
         tabIntegration = config.getBoolean("tab-integration", true);
+        disableWhenInvisible = config.getBoolean("disable-when-invisible", true);
         List<String> worlds = config.getStringList("disabled-worlds");
         worlds.forEach(world -> disabledWorlds.add(world.toLowerCase(Locale.ROOT)));
     }
@@ -28,6 +30,10 @@ public final class Settings {
 
     public boolean tabIntegration() {
         return tabIntegration;
+    }
+
+    public boolean disableWhenInvisible() {
+        return disableWhenInvisible;
     }
 
     public boolean isDisabled(World world) {

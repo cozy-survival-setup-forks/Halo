@@ -134,12 +134,14 @@ public final class GlowService {
         return current == null ? null : current.shown;
     }
 
-    /** Starts the glow the player has picked, or removes the glow if there is none or the world does not allow it. */
+    /** Starts the glow the player has picked, or removes the glow if there is none, the world does not allow
+     * it, or the player is invisible (the pick is kept and comes back when they are visible again). */
     public void refresh(Player player) {
         remove(player);
         if (!player.isOnline()) return;
 
-        if (plugin.settings().isDisabled(player.getWorld())) {
+        if (plugin.settings().isDisabled(player.getWorld())
+                || (plugin.settings().disableWhenInvisible() && player.isInvisible())) {
             cleanupOrphan(player);
             return;
         }
