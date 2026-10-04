@@ -1,7 +1,9 @@
 package dev.halo.glow;
 
+import dev.halo.Messages;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.NamedTextColor;
+import net.kyori.adventure.text.minimessage.MiniMessage;
 
 import java.util.List;
 
@@ -23,7 +25,8 @@ public record Glow(String id, String display, String permission, int interval, L
         return NamedTextColor.WHITE;
     }
 
+    /** The display name with MiniMessage and old &amp; codes applied; the glow's first colour is the fallback colour. */
     public Component displayComponent() {
-        return Component.text(display, firstColor());
+        return MiniMessage.miniMessage().deserialize(Messages.convertLegacy(display)).colorIfAbsent(firstColor());
     }
 }

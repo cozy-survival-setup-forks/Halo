@@ -15,7 +15,7 @@
 # color     the colour of a SINGLE glow
 # colors    the colours of the other types
 # interval  ticks between two changes (20 = one second)
-# display   the name in /glow list and menus (default: the id)
+# display   the name in /glow list and messages (default: the id); MiniMessage and & codes work
 # permission  replaces halo.glow.<id>
 
 glows:

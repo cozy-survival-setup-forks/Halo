@@ -64,7 +64,7 @@ public final class Messages {
     }
 
     /** Turns &amp; codes into MiniMessage tags. */
-    static String convertLegacy(String text) {
+    public static String convertLegacy(String text) {
         String result = HEX.matcher(text).replaceAll("<#$1>");
         return CODE.matcher(result).replaceAll(match -> Matcher.quoteReplacement(tagFor(match.group(1).charAt(0))));
     }
