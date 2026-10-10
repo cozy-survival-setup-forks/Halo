@@ -110,11 +110,19 @@ items:
   them back in their old team when the glow ends.
 - The glow comes back after a relog, a respawn and a world change, and is off in the worlds listed in `disabled-worlds`.
 
+## Keeping your files safe
+
+- `config.yml` and `messages.yml` start with a `config-version` / `lang-version` number. After an update, new settings are added to your files with their comments, and nothing you changed is touched. The old file is kept next to it as `<name>.<date>.bak` (the newest 5). A setting is only removed when the changelog says so.
+- A value with a mistake (a negative time, an item that does not exist, text where a number belongs) is named in the console by file and key. On a reload, the settings in use stay as they were.
+- Files are written to a temporary file and moved into place, with the previous version kept as `.bak`. A file that cannot be read is restored from its `.bak`, and the unreadable one is kept as `.broken-<time>`.
+- A file or database that was made by a newer version of the plugin is left alone and a warning is logged.
+- `/glow doctor` shows the health of the files, versions, last backup and recent save failures (no player data). `/glow backup now` makes a checked backup right away. Both need the admin permission.
+
 ## Telemetry
 
 On startup Halo sends a small anonymous beacon (plugin name/version, server software/version,
 online/max player counts, and a random ID with no player data) so we know which versions are in
-use. Turn it off with `metrics.enabled: false` in `config.yml`.
+use. Turn it off with `metrics.enabled: false` in `config.yml`. The random ID is kept as `server-id` in `data.yml` (older versions kept it in a `.server-id` file, which is moved over unchanged). The address and the interval are fixed in the plugin and are not settings.
 
 ## Building
 

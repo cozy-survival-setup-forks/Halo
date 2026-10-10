@@ -36,6 +36,8 @@ public final class GlowCommand implements TabExecutor {
             case "unequip" -> unequip(sender);
             case "list" -> list(sender);
             case "reload" -> reload(sender);
+            case "doctor" -> doctor(sender);
+            case "backup" -> backup(sender, args);
             case "admin" -> admin(sender, args);
             default -> plugin.messages().send(sender, "usage");
         }
@@ -93,6 +95,26 @@ public final class GlowCommand implements TabExecutor {
         }
     }
 
+    private void doctor(CommandSender sender) {
+        if (!sender.hasPermission(ADMIN)) {
+            plugin.messages().send(sender, "no-permission");
+            return;
+        }
+        plugin.doctor().forEach(sender::sendPlainMessage);
+    }
+
+    private void backup(CommandSender sender, String[] args) {
+        if (!sender.hasPermission(ADMIN)) {
+            plugin.messages().send(sender, "no-permission");
+            return;
+        }
+        if (args.length < 2 || !args[1].equalsIgnoreCase("now")) {
+            sender.sendPlainMessage("Use /glow backup now");
+            return;
+        }
+        sender.sendPlainMessage(plugin.backupNow() ? "Backup made and checked." : "The backup FAILED, see the console.");
+    }
+
     private void reload(CommandSender sender) {
         if (!sender.hasPermission(ADMIN)) {
             plugin.messages().send(sender, "no-permission");
@@ -142,7 +164,7 @@ public final class GlowCommand implements TabExecutor {
         List<String> options = new ArrayList<>();
         if (args.length == 1) {
             options.addAll(List.of("equip", "unequip", "list"));
-            if (sender.hasPermission(ADMIN)) options.addAll(List.of("reload", "admin"));
+            if (sender.hasPermission(ADMIN)) options.addAll(List.of("reload", "doctor", "backup", "admin"));
         } else if (args.length == 2 && args[0].equalsIgnoreCase("equip") && sender instanceof Player player) {
             plugin.glows().library().all().stream().filter(glow -> plugin.glows().canUse(player, glow)).forEach(glow -> options.add(glow.id()));
         } else if (args[0].equalsIgnoreCase("admin") && sender.hasPermission(ADMIN)) {

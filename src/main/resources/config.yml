@@ -1,3 +1,4 @@
+config-version: 1
 # Halo
 #
 # The glows themselves are in glows.yml, the texts in messages.yml. Reload both with /glow reload.
@@ -24,4 +25,3 @@ disable-when-invisible: true
 # counts, nothing else. Set to false to turn it off.
 metrics:
   enabled: true
-  interval-minutes: 45
